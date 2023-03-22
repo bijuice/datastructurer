@@ -1,68 +1,52 @@
 
 public class App {
     public static void main(String[] args) throws Exception {
-        SLList L = new SLList();
-        L.addFirst(10);
-        L.addFirst(5);
-        int x = L.getFirst();
+        IntList L = new IntList(5, null);
+        L.rest = new IntList(10, null);
+        L.rest.rest = new IntList(15, null);
 
-        System.out.print(L.size);
+        System.out.println(L.get(2));
     }
 
 }
 
-class SLList {
+class IntList {
+    public int first;
+    public IntList rest;
 
-    static class IntNode {
-        public int item;
-        public IntNode next;
-
-        public IntNode(int i, IntNode n) {
-            item = i;
-            next = n;
-        }
-    }
-
-    private IntNode sentinel;
-    public int size;
-
-    public SLList() {
-        sentinel = new IntNode(63, null);
-        size = 0;
-    }
-
-    /** Adds an item to the front of the list. */
-    public void addFirst(int x) {
-        sentinel = new IntNode(x, sentinel);
-        size = +1;
-    }
-
-    /** Retrieves the front item from the list. */
-    public int getFirst() {
-        return sentinel.item;
-    }
-
-    public void addLast(int x) {
-        size += 1;
-        IntNode p = sentinel;
-        while (p.next != null) {
-            p = p.next;
-        }
-
-        p.next = new IntNode(x, null);
-    }
-
-    /** Returns the size of the list starting at IntNode p. */
-    private static int size(IntNode p) {
-        if (p.next == null) {
-            return 1;
-        }
-
-        return 1 + size(p.next);
+    public IntList(int f, IntList r) {
+        first = f;
+        rest = r;
     }
 
     public int size() {
-        return size(sentinel);
+        if (rest == null) {
+            return 1;
+        }
+
+        return 1 + this.rest.size();
     }
 
+    public int iterativeSize() {
+        int counter = 0;
+        IntList current = this;
+        while (current != null) {
+            counter++;
+            current = current.rest;
+        }
+
+        return counter;
+    }
+
+    public int get(int i) {
+        int counter = 0;
+        IntList current = this;
+
+        while (i != counter) {
+            counter++;
+            current = current.rest;
+        }
+
+        return current.first;
+    }
 }
